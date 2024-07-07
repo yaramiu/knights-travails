@@ -19,5 +19,52 @@ function createSquares() {
   }
 }
 
+function checkBoardBounds(row, column) {
+  if (row < 0 || column < 0) {
+    return false;
+  } else if (row > 7 || column > 7) {
+    return false;
+  }
+  return true;
+}
+
+function findSquare(row, column) {
+  let foundSquare = null;
+  board.forEach((square) => {
+    if (square.row === row && square.column === column) {
+      foundSquare = square;
+    }
+  });
+  return foundSquare;
+}
+
+function addValidMoves() {
+  const knightMovements = [
+    [-2, -1],
+    [-2, 1],
+    [-1, -2],
+    [-1, 2],
+    [1, -2],
+    [1, 2],
+    [2, -1],
+    [2, 1],
+  ];
+  board.forEach((square) => {
+    knightMovements.forEach((knightMovement) => {
+      const [currentRow, currentColumn] = [square.row, square.column];
+      const movedRow = currentRow + knightMovement[0];
+      const movedColumn = currentColumn + knightMovement[1];
+      const isValidMove = checkBoardBounds(movedRow, movedColumn);
+      if (isValidMove) {
+        const foundSquare = findSquare(movedRow, movedColumn);
+        if (foundSquare) {
+          square.validMoves.push(foundSquare);
+        }
+      }
+    });
+  });
+}
+
 createSquares();
+addValidMoves();
 console.log(board);
